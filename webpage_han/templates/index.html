@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data from Jupyter Notebook</title>
+</head>
+
+<body>
+    <h1>The phase of moon</h1>
+    <table>
+        <tr>
+            <th>Month</th>
+            <th>Day</th>
+            <th>Phase</th>
+            <th>Time</th>
+            <th>Year</th>
+        </tr>
+        {% for phase in data.phasedata if phase.year == 2023 %}
+        <tr>
+            <td>{{ phase.month }}</td>
+            <td>{{ phase.day }}</td>
+            <td>{{ phase.phase }}</td>
+            <td>{{ phase.time }}</td>
+            <td>{{ phase.year }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h1>weather forecasting</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Low Cloud Cover Mean</th>
+                <th>Medium Cloud Cover Mean</th>
+                <th>High Cloud Cover Mean</th>
+                <th>Effective Cloud Cover Mean</th>
+                <th>Total Cloud Cover Mean</th>
+            </tr>
+        </thead>
+        <tbody id="weatherDataBody"></tbody>
+    </table>
+
+    <!-- Add your JavaScript code to populate the table -->
+    <script>
+        const combinedJson = {{ data['weather_data'] | safe }};
+        const weatherDataBody = document.getElementById('weatherDataBody');
+    
+        // Extract the data and populate the table
+        combinedJson.index.forEach((date, index) => {
+            const newRow = document.createElement('tr');
+            newRow.insertCell().appendChild(document.createTextNode(date));
+            combinedJson.data[index].forEach(value => {
+                const newCell = document.createElement('td');
+                newCell.appendChild(document.createTextNode(value));
+                newRow.appendChild(newCell);
+            });
+            weatherDataBody.appendChild(newRow);
+        });
+    </script>
+     
+</body>
+
+</html>
